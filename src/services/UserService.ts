@@ -1,26 +1,19 @@
-const BASE_URL = 'http://localhost:3000'; // Replace with your actual API URL
+const BASE_URL = 'http://localhost:3000/users'; // Replace with your actual API URL
 
-export const UserService = {
-  // Function to send the username to the backend
-  setUser: async (username: string): Promise<void> => {
+const UserService = {
+  setUser: async (username: string) => {
     try {
-      const response = await fetch(`${BASE_URL}/setUser`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username })
-      });
-
+      const response = await fetch(`${BASE_URL}/username/${username}`);
       if (!response.ok) {
         throw new Error('Failed to set user');
       }
+      const user = await response.json();
+      return user;
     } catch (error) {
       console.error('Error setting user:', error);
+      throw error;
     }
   },
-
-  // Additional user-related methods can go here
+  // ... other methods ...
 };
-
 export default UserService;

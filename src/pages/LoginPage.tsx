@@ -7,6 +7,7 @@ import InputField from '../ui/InputField';
 import Button from '../ui/Button';
 
 const LoginPage = () => {
+  console.log("LoginPage is rendering");
   const [username, setUsername] = useState('');
   const { setUser } = useUser();
   const navigate = useNavigate();
