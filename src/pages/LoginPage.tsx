@@ -1,5 +1,6 @@
 // src/pages/LoginPage.tsx
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
 import UserService from '../services/UserService';
 import InputField from '../ui/InputField';
@@ -8,6 +9,7 @@ import Button from '../ui/Button';
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const { setUser } = useUser();
+  const navigate = useNavigate();
 
   const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -18,7 +20,7 @@ const LoginPage = () => {
     if (username.trim()) {
       setUser(username);
       await UserService.setUser(username);
-      // Redirect to homepage or display message
+      navigate('/homepage');
     }
   };
 
