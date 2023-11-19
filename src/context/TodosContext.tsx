@@ -1,16 +1,22 @@
 // src/context/TodosContext.tsx
-import { createContext, useState, ReactNode } from 'react';
+import { createContext, useState, ReactNode, useEffect } from 'react';
 import TodoService from '../services/TodoService';
+import { useUser } from '../hooks/useUser';
 
 type Todo = {
-  // Define your Todo type
+  id: string;
+  title: string;
+  date: string;
+  repeat: 'Never' | 'Daily - Weekdays' | 'Daily - Weekends' | 'Daily' | 'Weekly';
+  dayOfWeek?: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
+  user: string;
 };
 
 type TodosContextType = {
   allTodos: Todo[];
   todaysTodos: Todo[];
-  loadAllTodos: () => Promise<void>;
-  loadTodaysTodos: () => Promise<void>;
+  loadAllTodos: (userName: string) => Promise<void>;
+  loadTodaysTodos: (userName: string) => Promise<void>;
 };
 
 const TodosContext = createContext<TodosContextType | undefined>(undefined);
@@ -22,14 +28,22 @@ type TodosProviderProps = {
 export const TodosProvider = ({ children }: TodosProviderProps) => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [todaysTodos, setTodaysTodos] = useState<Todo[]>([]);
+  const { user } = useUser();
 
-  const loadAllTodos = async () => {
-    const todos = await TodoService.fetchAllTodos();
+  useEffect(() => {
+    if (user) {
+      loadAllTodos(user);
+      loadTodaysTodos(user);
+    }
+  }, [user]);
+
+  const loadAllTodos = async (userName: string) => {
+    const todos = await TodoService.fetchAllTodos(userName);
     setAllTodos(todos);
   };
 
-  const loadTodaysTodos = async () => {
-    const todos = await TodoService.fetchTodaysTodos();
+  const loadTodaysTodos = async (userName: string) => {
+    const todos = await TodoService.fetchTodaysTodos(userName);
     setTodaysTodos(todos);
   };
 
