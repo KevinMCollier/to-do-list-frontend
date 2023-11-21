@@ -15,6 +15,7 @@ const API_BASE_URL = 'http://localhost:3000'; // Adjust as needed for your backe
 const TodoService = {
   fetchAllTodos: async (userId: string): Promise<Todo[]> => {
     const response = await fetch(`${API_BASE_URL}/todos/user/${userId}`);
+    console.log('Response for fetchAllTodos:', await response.clone().json());
     if (!response.ok) {
       throw new Error('Failed to fetch todos');
     }

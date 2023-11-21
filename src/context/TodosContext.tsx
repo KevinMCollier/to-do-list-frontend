@@ -27,6 +27,7 @@ export const TodosProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUser();
 
   useEffect(() => {
+    console.log("User ID in TodosContext:", user?._id); // Add this line
     if (user && user._id) {
       loadAllTodos(user._id);
       loadTodaysTodos(user._id);
@@ -34,11 +35,13 @@ export const TodosProvider = ({ children }: { children: ReactNode }) => {
   }, [user]);
 
   const loadAllTodos = async (userId: string) => {
+    console.log('Fetching all todos for user ID:', userId);
     const todos = await TodoService.fetchAllTodos(userId);
     setAllTodos(todos);
   };
 
   const loadTodaysTodos = async (userId: string) => {
+    console.log('Fetching todays todos for user ID:', userId);
     const todos = await TodoService.fetchTodaysTodos(userId);
     setTodaysTodos(todos);
   };

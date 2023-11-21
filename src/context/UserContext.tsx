@@ -14,6 +14,7 @@ type UserProviderProps = {
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  console.log("User in Context:", user); // Add this line
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
