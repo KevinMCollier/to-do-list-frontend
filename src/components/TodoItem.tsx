@@ -1,12 +1,7 @@
+import { Todo } from '../types/Todo'; // Import the Todo type
+
 type TodoItemProps = {
-  todo: {
-    id: string;
-    title: string;
-    date: string;
-    repeat: 'Never' | 'Daily - Weekdays' | 'Daily - Weekends' | 'Daily' | 'Weekly';
-    dayOfWeek?: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
-    user: string;
-  };
+  todo: Todo;
 };
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo }) => {

@@ -19,8 +19,8 @@ const LoginPage = () => {
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
     if (username.trim()) {
-      setUser(username);
-      await UserService.setUser(username);
+      const user = await UserService.setUser(username);
+      setUser(user);
       navigate('/homepage');
     }
   };

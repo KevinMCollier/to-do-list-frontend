@@ -8,7 +8,8 @@ const UserService = {
         throw new Error('Failed to set user');
       }
       const user = await response.json();
-      return user;
+      return user; // Return the entire user object
+      //       return user._id;
     } catch (error) {
       console.error('Error setting user:', error);
       throw error;

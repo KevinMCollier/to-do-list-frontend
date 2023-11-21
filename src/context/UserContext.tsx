@@ -1,8 +1,9 @@
 import { createContext, useState, ReactNode } from 'react';
+import { User } from '../types/User'; // Import the User interface
 
 type UserContextType = {
-  user: string | null;
-  setUser: (user: string) => void;
+  user: User | null;
+  setUser: (user: User) => void;
 };
 
 export const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -12,7 +13,8 @@ type UserProviderProps = {
 };
 
 export const UserProvider = ({ children }: UserProviderProps) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  console.log("User in Context:", user); // Add this line
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
