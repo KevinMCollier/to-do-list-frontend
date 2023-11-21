@@ -2,15 +2,7 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import TodoService from '../services/TodoService';
 import { useUser } from '../hooks/useUser';
-
-type Todo = {
-  id: string;
-  title: string;
-  date: string;
-  repeat: 'Never' | 'Daily - Weekdays' | 'Daily - Weekends' | 'Daily' | 'Weekly';
-  dayOfWeek?: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
-  user: string; // Update this if needed
-};
+import { Todo } from '../types/Todo'; // Import the User interface
 
 type TodosContextType = {
   allTodos: Todo[];

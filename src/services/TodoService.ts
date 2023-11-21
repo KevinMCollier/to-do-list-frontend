@@ -1,14 +1,5 @@
-// src/services/TodoService.ts
+import { Todo } from '../types/Todo'; // Import the Todo type
 
-// Assuming this is the type of your todo items
-type Todo = {
-  id: string;
-  title: string;
-  date: string;
-  repeat: 'Never' | 'Daily - Weekdays' | 'Daily - Weekends' | 'Daily' | 'Weekly';
-  dayOfWeek?: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
-  user: string;
-};
 
 const API_BASE_URL = 'http://localhost:3000'; // Adjust as needed for your backend URL
 
