@@ -7,7 +7,7 @@ type TodoListProps = {
 
 const ToDoList: React.FC<TodoListProps> = ({ todos }) => {
   return (
-    <div className="bg-beige p-4 rounded">
+    <div className="bg-lightGray mx-auto p-4 rounded max-w-xl">
       {todos.map(todo => (
         <TodoItem key={todo._id} todo={todo} />
       ))}
