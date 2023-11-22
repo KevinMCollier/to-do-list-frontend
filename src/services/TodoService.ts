@@ -22,7 +22,21 @@ const TodoService = {
     return await response.json();
   },
 
-  // Additional functions as needed
+  createTodo: async (todoData: { title: string; date: Date, userId: string }): Promise<Todo> => {
+    const response = await fetch(`${API_BASE_URL}/todos`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ ...todoData, date: todoData.date.toISOString() }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to create todo');
+    }
+
+    return await response.json();
+  }
 };
 
 export default TodoService;
