@@ -3,6 +3,7 @@ import { UserProvider } from './context/UserContext';
 import { TodosProvider } from './context/TodosContext';
 import LoginPage from './pages/LoginPage';
 import Homepage from './pages/Homepage';
+import CreateTodoPage from './pages/CreateTodoPage';
 import './App.css'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
               <Homepage />
             </TodosProvider>
           } />
+          <Route path="/create-todo" element={<CreateTodoPage />} />
         </Routes>
       </UserProvider>
     </Router>
