@@ -3,12 +3,16 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface AddTodoFormProps {
-  onAddTodo: (todo: { title: string; date: Date }) => void;
+  onAddTodo: (todo: { title: string; date: Date; repeat: string }) => void;
 }
+
+
+const repeatOptions = ['Never', 'Daily', 'Daily - Weekdays', 'Daily - Weekends', 'Weekly'];
 
 const AddTodoForm = ({ onAddTodo }: AddTodoFormProps) => {
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(new Date());
+  const [repeat, setRepeat] = useState(repeatOptions[0]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -17,11 +21,14 @@ const AddTodoForm = ({ onAddTodo }: AddTodoFormProps) => {
     onAddTodo({
       title,
       date,
+      repeat
     });
 
     setTitle('');
     setDate(new Date());
+    setRepeat(repeatOptions[0]);
   };
+
 
   const handleDateChange = (newDate: Date | null) => {
     if (newDate) {
@@ -38,6 +45,11 @@ const AddTodoForm = ({ onAddTodo }: AddTodoFormProps) => {
         placeholder="Todo title"
       />
       <DatePicker selected={date} onChange={handleDateChange} />
+      <select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
+        {repeatOptions.map(option => (
+          <option key={option} value={option}>{option}</option>
+        ))}
+      </select>
       <button type="submit">Add Todo</button>
     </form>
   );

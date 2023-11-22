@@ -1,23 +1,23 @@
 import AddTodoForm from '../components/AddTodoForm';
 import TodoService from '../services/TodoService';
-import { useUser } from '../hooks/useUser'; // Use your custom hook
+import { useUser } from '../hooks/useUser';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTodoPage = () => {
-  const { user } = useUser(); // Use the useUser hook
+  const navigate = useNavigate();
+  const { user } = useUser();
 
-  const handleAddTodo = async (todoData: { title: string; date: Date }) => {
-    // Ensure user is not null before proceeding
+  const handleAddTodo = async (todoData: { title: string; date: Date, repeat: string }) => {
     if (!user) return;
 
     try {
       await TodoService.createTodo({
         ...todoData,
-        userId: user._id, // Assuming user object has _id
+        userId: user._id,
       });
-      // Handle post-creation logic here (e.g., navigate to a different page)
+      navigate('/homepage'); // Redirect to homepage
     } catch (error) {
       console.error('Error creating todo:', error);
-      // Handle error (e.g., show error message)
     }
   };
 

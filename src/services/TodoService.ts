@@ -1,7 +1,7 @@
-import { Todo } from '../types/Todo'; // Import the Todo type
+import { Todo } from '../types/Todo';
 
 
-const API_BASE_URL = 'http://localhost:3000'; // Adjust as needed for your backend URL
+const API_BASE_URL = 'http://localhost:3000';
 
 const TodoService = {
   fetchAllTodos: async (userId: string): Promise<Todo[]> => {
@@ -22,13 +22,18 @@ const TodoService = {
     return await response.json();
   },
 
-  createTodo: async (todoData: { title: string; date: Date, userId: string }): Promise<Todo> => {
+  createTodo: async (todoData: { title: string; date: Date, userId: string, repeat: string }): Promise<Todo> => {
     const response = await fetch(`${API_BASE_URL}/todos`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ...todoData, date: todoData.date.toISOString() }),
+      body: JSON.stringify({
+        title: todoData.title,
+        date: todoData.date.toISOString(),
+        user: todoData.userId,
+        repeat: todoData.repeat
+      }),
     });
 
     if (!response.ok) {
