@@ -5,21 +5,22 @@ type ToggleSwitchProps = {
 
 const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ isToday, setTodayView }) => {
   return (
-    <div className="flex justify-center space-x-2 mb-4">
+    <div className="flex justify-center mb-4 border-b border-gray-300">
       <button
-        className={`px-4 py-2 rounded-lg ${isToday ? 'bg-blue-500 text-white' : 'bg-transparent border border-gray-300'}`}
+        className={`px-4 py-2 -mb-px font-medium text-sm ${isToday ? 'text-gray-500 hover:text-blue-500' : 'text-blue-500 border-blue-500 border-b-2'}`}
         onClick={() => setTodayView(false)}
       >
-        My To Do List
+        All Tasks
       </button>
       <button
-        className={`px-4 py-2 rounded-lg ${!isToday ? 'bg-blue-500 text-white' : 'bg-transparent border border-gray-300'}`}
+        className={`px-4 py-2 -mb-px font-medium text-sm ${!isToday ? 'text-gray-500 hover:text-blue-500' : 'text-blue-500 border-blue-500 border-b-2'}`}
         onClick={() => setTodayView(true)}
       >
-        Today
+        Today's Tasks
       </button>
     </div>
   );
 };
+
 
 export default ToggleSwitch;

@@ -2,6 +2,7 @@ import AddTodoForm from '../components/AddTodoForm';
 import TodoService from '../services/TodoService';
 import { useUser } from '../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const CreateTodoPage = () => {
   const navigate = useNavigate();
@@ -22,8 +23,12 @@ const CreateTodoPage = () => {
   };
 
   return (
-    <div>
-      <h1>Create New Todo</h1>
+    <div className="bg-offWhite min-h-screen p-4 max-w-lg mx-auto">
+      <div className="mb-4">
+        <Link to="/homepage" className="text-blue-500 hover:text-blue-700">
+          ← Return
+        </Link>
+      </div>
       <AddTodoForm onAddTodo={handleAddTodo} />
     </div>
   );
