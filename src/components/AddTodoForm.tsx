@@ -37,21 +37,26 @@ const AddTodoForm = ({ onAddTodo }: AddTodoFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        value={title}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)}
-        placeholder="Todo title"
-      />
-      <DatePicker selected={date} onChange={handleDateChange} />
-      <select value={repeat} onChange={(e) => setRepeat(e.target.value)}>
-        {repeatOptions.map(option => (
-          <option key={option} value={option}>{option}</option>
-        ))}
-      </select>
-      <button type="submit">Add Todo</button>
-    </form>
+<form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+  <div className="mb-4">
+    <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" value={title} onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)} placeholder="Todo title" />
+  </div>
+  <div className="mb-4">
+    <DatePicker selected={date} onChange={handleDateChange} className="form-datepicker" />
+  </div>
+  <div className="mb-4">
+    <p>Choose frequency:</p>
+    <select className="shadow border rounded w-full py-2 px-3 text-gray-700" value={repeat} onChange={(e) => setRepeat(e.target.value)}>
+      {repeatOptions.map(option => (
+        <option key={option} value={option}>{option}</option>
+      ))}
+    </select>
+  </div>
+  <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+    Add Todo
+  </button>
+</form>
+
   );
 };
 
