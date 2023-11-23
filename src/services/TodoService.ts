@@ -41,7 +41,17 @@ const TodoService = {
     }
 
     return await response.json();
-  }
+  },
+
+  deleteTodo: async (todoId: string, userId: string): Promise<void> => {
+    const response = await fetch(`${API_BASE_URL}/todos/${todoId}?user=${userId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete todo');
+    }
+  },
 };
 
 export default TodoService;
