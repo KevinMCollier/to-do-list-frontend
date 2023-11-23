@@ -26,7 +26,9 @@ const Homepage = () => {
       <ToggleSwitch isToday={isTodayView} setTodayView={setIsTodayView} />
       <div className="flex flex-col items-center">
         <TodoList todos={isTodayView ? todaysTodos : allTodos} refreshTodos={refreshTodos} />
-        <Link to="/create-todo" className="text-blue-500 hover:text-blue-700 mt-4">Create New Todo</Link>
+        <Link to="/create-todo" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4 inline-flex items-center">
+          <span>Add New Item</span>
+        </Link>
       </div>
     </div>
   );
