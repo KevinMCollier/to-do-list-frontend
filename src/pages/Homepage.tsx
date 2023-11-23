@@ -3,19 +3,29 @@ import ToggleSwitch from '../components/ToggleSwitch';
 import useTodos from '../hooks/useTodos';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useUser } from '../hooks/useUser'; // Import the useUser hook
 
 const Homepage = () => {
   const [isTodayView, setIsTodayView] = useState(false);
-  const { allTodos, todaysTodos } = useTodos();
-  console.log("All Todos:", allTodos); // Add this line
-  console.log("Today's Todos:", todaysTodos); // Add this line
+  const { allTodos, todaysTodos, loadAllTodos, loadTodaysTodos } = useTodos();
+  const { user } = useUser(); // Use the useUser hook to access the user context
 
+  const refreshTodos = () => {
+    // Check if user is available
+    if (user) {
+      if (isTodayView) {
+        loadTodaysTodos(user._id); // Pass user ID to loadTodaysTodos
+      } else {
+        loadAllTodos(user._id); // Pass user ID to loadAllTodos
+      }
+    }
+  };
 
   return (
     <div className="bg-offWhite min-h-screen p-4">
       <ToggleSwitch isToday={isTodayView} setTodayView={setIsTodayView} />
       <div className="flex flex-col items-center">
-        <TodoList todos={isTodayView ? todaysTodos : allTodos} />
+        <TodoList todos={isTodayView ? todaysTodos : allTodos} refreshTodos={refreshTodos} />
         <Link to="/create-todo" className="text-blue-500 hover:text-blue-700 mt-4">Create New Todo</Link>
       </div>
     </div>
