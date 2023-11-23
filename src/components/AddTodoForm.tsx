@@ -1,6 +1,7 @@
 import { useState, FormEvent, ChangeEvent } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { FaRegCalendarAlt } from 'react-icons/fa';
 
 interface AddTodoFormProps {
   onAddTodo: (todo: { title: string; date: Date; repeat: string }) => void;
@@ -41,8 +42,9 @@ const AddTodoForm = ({ onAddTodo }: AddTodoFormProps) => {
   <div className="mb-4">
     <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" value={title} onChange={(e: ChangeEvent<HTMLInputElement>) => setTitle(e.target.value)} placeholder="Todo title" />
   </div>
-  <div className="mb-4">
-    <DatePicker selected={date} onChange={handleDateChange} className="form-datepicker" />
+  <div className="mb-4 flex items-center">
+    <DatePicker selected={date} onChange={handleDateChange} className="form-datepicker shadow border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-1" />
+    <FaRegCalendarAlt className="ml-2 text-gray-500" />
   </div>
   <div className="mb-4">
     <p>Choose frequency:</p>
