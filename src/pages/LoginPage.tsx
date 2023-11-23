@@ -27,15 +27,14 @@ const LoginPage = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <form onSubmit={handleLogin} className="max-w-sm mx-auto">
-        <h1 className="text-2xl font-bold text-center mb-4">Login</h1>
+      <form onSubmit={handleLogin} className="max-w-sm mx-auto my-20">
         <InputField
           type="text"
           name="username"
           placeholder="Enter Username"
           value={username}
           onChange={handleUsernameChange}
-          className="mb-4"
+          className="mb-6 w-full"
         />
         <Button type="submit" className="w-full">Login</Button>
       </form>
