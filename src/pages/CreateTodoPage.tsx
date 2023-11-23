@@ -26,7 +26,7 @@ const CreateTodoPage = () => {
     <div className="bg-offWhite min-h-screen p-4 max-w-lg mx-auto">
       <div className="mb-4">
         <Link to="/homepage" className="text-blue-500 hover:text-blue-700">
-          ← Back to Homepage
+          ← Return
         </Link>
       </div>
       <AddTodoForm onAddTodo={handleAddTodo} />
