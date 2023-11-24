@@ -46,7 +46,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
         <div key={date} className={viewMode === 'week' ? 'date-card' : ''}
             onMouseEnter={() => setHoveredDate(date)}
             onMouseLeave={() => setHoveredDate('')}>
-          <h4 className="text-lg font-bold date-header">
+          <h4 className="text-sm font-semibold date-header">
             {viewMode !== 'all' && (
               <>
                 {format(new Date(date), 'MMMM dd, yyyy')}
