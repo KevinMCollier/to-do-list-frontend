@@ -1,0 +1,18 @@
+.date-card {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.date-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.down-arrow {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #506bc4;
+}
