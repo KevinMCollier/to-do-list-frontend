@@ -2,8 +2,11 @@ import TodoItem from './TodoItem';
 import { Todo } from '../types/Todo';
 import TodoService from '../services/TodoService';
 import { useUser } from '../hooks/useUser';
-import { groupTasksByDisplayDates, startOfWeek, endOfWeek, groupTasksByDate } from '../utils/utils';
-import { format } from 'date-fns';
+import { groupTasksByDisplayDates, groupTasksByDate } from '../utils/utils';
+import { format, addDays, startOfDay, isSameDay } from 'date-fns';
+import { useState } from 'react';
+import './TodoList.css'; // Assuming you have a CSS file for styling
+
 
 type TodoListProps = {
   todos: Todo[];
@@ -13,21 +16,22 @@ type TodoListProps = {
 
 const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) => {
   const { user } = useUser();
+  const [hoveredDate, setHoveredDate] = useState('');
 
-  let groupedTodos: Record<string, Todo[]> = {}; // Explicitly defining the type
+  let groupedTodos: Record<string, Todo[]> = {};
+  const today = startOfDay(new Date());
+
   if (viewMode === 'all') {
-    groupedTodos = groupTasksByDate(todos); // Use the original grouping logic for 'all' view
+    groupedTodos = groupTasksByDate(todos);
   } else if (viewMode === 'today') {
-    // Logic for today's tasks
+    groupedTodos[today.toISOString()] = todos.filter(todo => isSameDay(new Date(todo.date), today));
   } else if (viewMode === 'week') {
-    const start = startOfWeek(new Date());
-    const end = endOfWeek(new Date());
-    groupedTodos = groupTasksByDisplayDates(todos, start, end);
+    const end = addDays(today, 7);
+    groupedTodos = groupTasksByDisplayDates(todos, today, end);
   }
 
   const handleDelete = async (todoId: string) => {
     if (!user) return;
-
     try {
       await TodoService.deleteTodo(todoId, user._id);
       refreshTodos();
@@ -39,13 +43,24 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
   return (
     <div className="bg-lightGray mx-auto p-4 rounded max-w-3xl">
       {Object.entries(groupedTodos).map(([date, todosForDate]) => (
-        <div key={date}>
-          <h4 className="text-lg font-bold">
-            {format(new Date(date), 'MMMM dd, yyyy')}
+        <div key={date} className={viewMode === 'week' ? 'date-card' : ''}
+            onMouseEnter={() => setHoveredDate(date)}
+            onMouseLeave={() => setHoveredDate('')}>
+          <h4 className="text-lg font-bold date-header">
+            {viewMode !== 'all' && (
+              <>
+                {format(new Date(date), 'MMMM dd, yyyy')}
+                {viewMode === 'week' && <span className="down-arrow">&#9660;</span>}
+              </>
+            )}
           </h4>
-          {todosForDate.map(todo => (
-            <TodoItem key={todo._id} todo={todo} onDelete={handleDelete} />
-          ))}
+          {(viewMode !== 'week' || hoveredDate === date) && (
+            <div className={viewMode === 'week' ? 'tasks-dropdown' : ''}>
+              {todosForDate.map(todo => (
+                <TodoItem key={todo._id} todo={todo} onDelete={handleDelete} />
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </div>

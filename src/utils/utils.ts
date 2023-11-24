@@ -1,27 +1,42 @@
 import { Todo } from '../types/Todo';
-import { format, parseISO, compareAsc, startOfWeek, endOfWeek, eachDayOfInterval, isWeekend } from 'date-fns';
+import { format, parseISO, isBefore, isAfter, compareAsc, startOfWeek, endOfWeek, eachDayOfInterval, isWeekend } from 'date-fns';
+
 
 const isWeekday = (date: Date) => !isWeekend(date);
 
-const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Date[] => {
-  let dates: Date[] = [];
 
-  if (task.repeat === 'Never') {
-    dates.push(new Date(task.date));
-  } else {
-    const interval = eachDayOfInterval({ start: startDate, end: endDate });
-    if (task.repeat === 'Daily') {
-      dates = interval;
-    } else if (task.repeat === 'Daily - Weekdays') {
-      dates = interval.filter(isWeekday);
-    } else if (task.repeat === 'Daily - Weekends') {
-      dates = interval.filter(isWeekend);
-    } else if (task.repeat === 'Weekly' && task.dayOfWeek) {
-      dates = interval.filter(date => format(date, 'EEEE') === task.dayOfWeek);
+const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Date[] => {
+  const dates: Date[] = [];
+  const taskStartDate = new Date(task.date);
+
+  // Check if the task's own date falls within the interval, including it even for 'Never' repeat status
+  if (task.repeat === 'Never' && isBefore(taskStartDate, endDate) && !isBefore(taskStartDate, startDate)) {
+    dates.push(taskStartDate);
+  }
+
+  // If the task repeats, calculate the repeated dates within the interval
+  if (task.repeat !== 'Never') {
+    const effectiveStartDate = isBefore(taskStartDate, startDate) ? startDate : taskStartDate;
+    if (!isAfter(effectiveStartDate, endDate)) {
+      const interval = eachDayOfInterval({ start: effectiveStartDate, end: endDate });
+      if (task.repeat === 'Daily') {
+        dates.push(...interval);
+      } else if (task.repeat === 'Daily - Weekdays') {
+        dates.push(...interval.filter(isWeekday));
+      } else if (task.repeat === 'Daily - Weekends') {
+        dates.push(...interval.filter(isWeekend));
+      } else if (task.repeat === 'Weekly' && task.dayOfWeek) {
+        dates.push(...interval.filter(date => format(date, 'EEEE') === task.dayOfWeek));
+      }
     }
   }
-  return dates;
+
+  // Remove any duplicate dates
+  return [...new Set(dates.map(date => date.toISOString()))].map(dateStr => new Date(dateStr));
 };
+
+
+
 
 const groupTasksByDisplayDates = (tasks: Todo[], startDate: Date, endDate: Date): Record<string, Todo[]> => {
   const groupedTasks: Record<string, Todo[]> = {};
