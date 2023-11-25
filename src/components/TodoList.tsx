@@ -5,7 +5,7 @@ import { useUser } from '../hooks/useUser';
 import { groupTasksByDisplayDates, groupTasksByDate } from '../utils/utils';
 import { format, addDays, startOfDay, isSameDay } from 'date-fns';
 import { useState } from 'react';
-import './TodoList.css'; // Assuming you have a CSS file for styling
+import './TodoList.css';
 
 
 type TodoListProps = {
