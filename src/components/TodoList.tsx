@@ -24,8 +24,8 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
   if (viewMode === 'all') {
     groupedTodos = groupTasksByDate(todos);
   } else if (viewMode === 'today') {
-    groupedTodos[today.toISOString()] = todos.filter(todo => isSameDay(new Date(todo.date), today));
-  } else if (viewMode === 'week') {
+    const filteredTodayTodos = todos.filter(todo => isSameDay(new Date(todo.date), today));
+    groupedTodos[today.toISOString()] = filteredTodayTodos;  } else if (viewMode === 'week') {
     const end = addDays(today, 7);
     groupedTodos = groupTasksByDisplayDates(todos, today, end);
   }
