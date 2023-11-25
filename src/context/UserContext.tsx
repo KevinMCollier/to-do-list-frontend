@@ -1,5 +1,5 @@
 import { createContext, useState, ReactNode } from 'react';
-import { User } from '../types/User'; // Import the User interface
+import { User } from '../types/User';
 
 type UserContextType = {
   user: User | null;
@@ -14,7 +14,6 @@ type UserProviderProps = {
 
 export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
-  console.log("User in Context:", user); // Add this line
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
