@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:3000/users'; // Replace with your actual API URL
+const BASE_URL = 'http://localhost:3000/users';
 
 const UserService = {
   setUser: async (username: string) => {
@@ -8,13 +8,11 @@ const UserService = {
         throw new Error('Failed to set user');
       }
       const user = await response.json();
-      return user; // Return the entire user object
-      //       return user._id;
+      return user;
     } catch (error) {
       console.error('Error setting user:', error);
       throw error;
     }
-  },
-  // ... other methods ...
+  }
 };
 export default UserService;
