@@ -1,9 +1,7 @@
 import { Todo } from '../types/Todo';
-import { format, parseISO, isBefore, isAfter, compareAsc, startOfWeek, endOfWeek, eachDayOfInterval, isWeekend } from 'date-fns';
-
+import { format, parseISO, isBefore, isAfter, compareAsc, eachDayOfInterval, isWeekend } from 'date-fns';
 
 const isWeekday = (date: Date) => !isWeekend(date);
-
 
 const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Date[] => {
   const dates: Date[] = [];
@@ -14,7 +12,6 @@ const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Dat
     dates.push(taskStartDate);
   }
 
-  // If the task repeats, calculate the repeated dates within the interval
   if (task.repeat !== 'Never') {
     const effectiveStartDate = isBefore(taskStartDate, startDate) ? startDate : taskStartDate;
     if (!isAfter(effectiveStartDate, endDate)) {
@@ -31,12 +28,8 @@ const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Dat
     }
   }
 
-  // Remove any duplicate dates
   return [...new Set(dates.map(date => date.toISOString()))].map(dateStr => new Date(dateStr));
 };
-
-
-
 
 const groupTasksByDisplayDates = (tasks: Todo[], startDate: Date, endDate: Date): Record<string, Todo[]> => {
   const groupedTasks: Record<string, Todo[]> = {};
@@ -49,7 +42,6 @@ const groupTasksByDisplayDates = (tasks: Todo[], startDate: Date, endDate: Date)
     });
   });
 
-  // Sort the grouped dates
   const sortedDates = Object.keys(groupedTasks).sort((a, b) => compareAsc(new Date(a), new Date(b)));
   const sortedGrouped: Record<string, Todo[]> = {};
   sortedDates.forEach(date => {
@@ -67,7 +59,6 @@ const groupTasksByDate = (tasks: Todo[]): Record<string, Todo[]> => {
     return group;
   }, {} as Record<string, Todo[]>);
 
-  // Sort the grouped dates
   const sortedDates = Object.keys(grouped).sort((a, b) => compareAsc(parseISO(a), parseISO(b)));
   const sortedGrouped: Record<string, Todo[]> = {};
   sortedDates.forEach(date => {
@@ -77,4 +68,4 @@ const groupTasksByDate = (tasks: Todo[]): Record<string, Todo[]> => {
   return sortedGrouped;
 };
 
-export { groupTasksByDisplayDates, groupTasksByDate, startOfWeek, endOfWeek };
+export { groupTasksByDisplayDates, groupTasksByDate };
