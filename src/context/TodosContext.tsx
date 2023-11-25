@@ -2,7 +2,7 @@
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import TodoService from '../services/TodoService';
 import { useUser } from '../hooks/useUser';
-import { Todo } from '../types/Todo'; // Import the User interface
+import { Todo } from '../types/Todo';
 
 type TodosContextType = {
   allTodos: Todo[];
@@ -19,7 +19,7 @@ export const TodosProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUser();
 
   useEffect(() => {
-    console.log("User ID in TodosContext:", user?._id); // Add this line
+    console.log("User ID in TodosContext:", user?._id);
     if (user && user._id) {
       loadAllTodos(user._id);
       loadTodaysTodos(user._id);
