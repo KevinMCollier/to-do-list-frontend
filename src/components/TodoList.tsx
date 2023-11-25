@@ -2,11 +2,10 @@ import TodoItem from './TodoItem';
 import { Todo } from '../types/Todo';
 import TodoService from '../services/TodoService';
 import { useUser } from '../hooks/useUser';
-import { groupTasksByDisplayDates, groupTasksByDate } from '../utils/utils';
-import { format, addDays, startOfDay, isSameDay } from 'date-fns';
+import { groupTasksByDisplayDates } from '../utils/utils'
+import { format, addDays, startOfDay } from 'date-fns';
 import { useState } from 'react';
 import './TodoList.css';
-
 
 type TodoListProps = {
   todos: Todo[];
@@ -18,18 +17,10 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
   const { user } = useUser();
   const [hoveredDate, setHoveredDate] = useState('');
 
-  let groupedTodos: Record<string, Todo[]> = {};
   const today = startOfDay(new Date());
-
-  if (viewMode === 'all') {
-    groupedTodos = groupTasksByDate(todos);
-  } else if (viewMode === 'today') {
-    const filteredTodayTodos = todos.filter(todo => isSameDay(new Date(todo.date), today));
-    groupedTodos[today.toISOString()] = filteredTodayTodos;
-  } else if (viewMode === 'week') {
-    const end = addDays(today, 7);
-    groupedTodos = groupTasksByDisplayDates(todos, today, end);
-  }
+  const groupedTodos: Record<string, Todo[]> = viewMode === 'week'
+    ? groupTasksByDisplayDates(todos, today, addDays(today, 7))
+    : { [today.toISOString()]: todos };
 
   const handleDelete = async (todoId: string) => {
     if (!user) return;

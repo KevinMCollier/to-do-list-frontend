@@ -1,5 +1,5 @@
 import { Todo } from '../types/Todo';
-import { format, parseISO, isBefore, isAfter, compareAsc, eachDayOfInterval, isWeekend } from 'date-fns';
+import { format, isBefore, isAfter, compareAsc, eachDayOfInterval, isWeekend } from 'date-fns';
 
 const isWeekday = (date: Date) => !isWeekend(date);
 
@@ -51,21 +51,4 @@ const groupTasksByDisplayDates = (tasks: Todo[], startDate: Date, endDate: Date)
   return sortedGrouped;
 };
 
-const groupTasksByDate = (tasks: Todo[]): Record<string, Todo[]> => {
-  const grouped = tasks.reduce((group, task) => {
-    const date = format(parseISO(task.date), 'yyyy-MM-dd');
-    group[date] = group[date] ?? [];
-    group[date].push(task);
-    return group;
-  }, {} as Record<string, Todo[]>);
-
-  const sortedDates = Object.keys(grouped).sort((a, b) => compareAsc(parseISO(a), parseISO(b)));
-  const sortedGrouped: Record<string, Todo[]> = {};
-  sortedDates.forEach(date => {
-    sortedGrouped[date] = grouped[date];
-  });
-
-  return sortedGrouped;
-};
-
-export { groupTasksByDisplayDates, groupTasksByDate };
+export { groupTasksByDisplayDates };
