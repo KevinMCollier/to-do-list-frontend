@@ -1,4 +1,5 @@
-// src/ui/InputField.tsx
+// @ts-expect-error config issues between React and Typescript for testing
+import React from 'react';
 import { FC, ChangeEventHandler } from 'react';
 
 interface InputFieldProps {

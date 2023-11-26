@@ -1,5 +1,5 @@
 import { Todo } from '../types/Todo';
-import { format, isBefore, isAfter, compareAsc, eachDayOfInterval, isWeekend } from 'date-fns';
+import { format, isBefore, isAfter, isEqual, compareAsc, eachDayOfInterval, isWeekend } from 'date-fns';
 
 const isWeekday = (date: Date) => !isWeekend(date);
 
@@ -8,9 +8,10 @@ const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Dat
   const taskStartDate = new Date(task.date);
 
   // Check if the task's own date falls within the interval, including it even for 'Never' repeat status
-  if (task.repeat === 'Never' && isBefore(taskStartDate, endDate) && !isBefore(taskStartDate, startDate)) {
+  if (task.repeat === 'Never' && (isBefore(taskStartDate, endDate) || isEqual(taskStartDate, endDate)) && !isBefore(taskStartDate, startDate)) {
     dates.push(taskStartDate);
   }
+
 
   if (task.repeat !== 'Never') {
     const effectiveStartDate = isBefore(taskStartDate, startDate) ? startDate : taskStartDate;
@@ -28,6 +29,7 @@ const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Dat
     }
   }
 
+  console.log(`Task: ${task._id}, Dates:`, dates);
   return [...new Set(dates.map(date => date.toISOString()))].map(dateStr => new Date(dateStr));
 };
 
@@ -48,6 +50,7 @@ const groupTasksByDisplayDates = (tasks: Todo[], startDate: Date, endDate: Date)
     sortedGrouped[date] = groupedTasks[date];
   });
 
+  console.log('Grouped Tasks:', groupedTasks);
   return sortedGrouped;
 };
 

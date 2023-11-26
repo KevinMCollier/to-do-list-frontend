@@ -1,3 +1,5 @@
+// @ts-expect-error config issues between React and Typescript for testing
+import React from 'react';
 import { FC, ReactNode, MouseEventHandler } from 'react';
 
 interface ButtonProps {
