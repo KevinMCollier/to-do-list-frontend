@@ -4,6 +4,8 @@ import { useUser } from '../hooks/useUser';
 import UserService from '../services/UserService';
 import InputField from '../ui/InputField';
 import Button from '../ui/Button';
+// @ts-expect-error config issues between React and Typescript for testing
+import React from 'react';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
