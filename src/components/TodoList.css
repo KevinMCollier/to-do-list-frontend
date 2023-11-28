@@ -16,3 +16,15 @@
   font-size: 14px;
   color: #506bc4;
 }
+
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
