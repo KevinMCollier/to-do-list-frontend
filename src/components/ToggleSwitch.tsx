@@ -22,7 +22,7 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = ({ viewMode, setViewMode }) =>
         className={`px-4 py-2 -mb-px font-medium text-sm ${viewMode === 'week' ? 'text-blue-500 border-blue-500 border-b-2' : 'text-gray-500 hover:text-blue-500'}`}
         onClick={() => setViewMode('week')}
       >
-        This Week
+        Upcoming
       </button>
     </div>
   );
