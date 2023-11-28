@@ -17,7 +17,13 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
   const { user } = useUser();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
 
-  const groupedTodos: Record<string, Todo[]> = groupTasksByDisplayDates(todos, selectedDate, addDays(selectedDate, 1));
+  let displayedTodos: Todo[] = [];
+  if (viewMode === 'week') {
+    const groupedTodos: Record<string, Todo[]> = groupTasksByDisplayDates(todos, selectedDate, addDays(selectedDate, 1));
+    displayedTodos = groupedTodos[format(selectedDate, 'yyyy-MM-dd')] || [];
+  } else {
+    displayedTodos = todos;
+  }
 
   const handleDelete = async (todoId: string) => {
     if (!user) return;
@@ -45,12 +51,11 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
           <button onClick={() => handleDateChange('right')}>{'>'}</button>
         </div>
       )}
-<div>
-  {groupedTodos[format(selectedDate, 'yyyy-MM-dd')] && groupedTodos[format(selectedDate, 'yyyy-MM-dd')].map(todo => (
-    <TodoItem key={todo._id} todo={todo} onDelete={handleDelete} />
-  ))}
-</div>
-
+      <div>
+        {displayedTodos.map(todo => (
+          <TodoItem key={todo._id} todo={todo} onDelete={handleDelete} />
+        ))}
+      </div>
     </div>
   );
 };
