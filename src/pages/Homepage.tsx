@@ -3,12 +3,12 @@ import ToggleSwitch from '../components/ToggleSwitch';
 import useTodos from '../hooks/useTodos';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
 
 const Homepage = () => {
   const [viewMode, setViewMode] = useState<'all' | 'today' | 'week'>('all');
   const { allTodos, todaysTodos, loadAllTodos, loadTodaysTodos } = useTodos();
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const refreshTodos = () => {
     if (user) {

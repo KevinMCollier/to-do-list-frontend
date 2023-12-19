@@ -1,7 +1,7 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import LoginPage from './LoginPage';
-import { UserContext } from '../context/UserContext';
+import { UserContext } from '../context/AuthContext';
 import '@testing-library/jest-dom';
 // @ts-expect-error config issues between React and Typescript
 import React from 'react';

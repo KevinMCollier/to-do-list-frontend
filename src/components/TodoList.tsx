@@ -1,7 +1,7 @@
 import TodoItem from './TodoItem';
 import { Todo } from '../types/Todo';
 import TodoService from '../services/TodoService';
-import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
 import { groupTasksByDisplayDates } from '../utils/utils';
 import { format, addDays, startOfDay, subDays } from 'date-fns';
 import { useState } from 'react';
@@ -15,7 +15,7 @@ type TodoListProps = {
 };
 
 const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) => {
-  const { user } = useUser();
+  const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
 
   let displayedTodos: Todo[] = [];

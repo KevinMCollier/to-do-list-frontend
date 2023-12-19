@@ -1,7 +1,7 @@
 // src/context/TodosContext.tsx
 import { createContext, useState, useEffect, ReactNode } from 'react';
 import TodoService from '../services/TodoService';
-import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
 import { Todo } from '../types/Todo';
 
 type TodosContextType = {
@@ -16,7 +16,7 @@ const TodosContext = createContext<TodosContextType | undefined>(undefined);
 export const TodosProvider = ({ children }: { children: ReactNode }) => {
   const [allTodos, setAllTodos] = useState<Todo[]>([]);
   const [todaysTodos, setTodaysTodos] = useState<Todo[]>([]);
-  const { user } = useUser();
+  const { user } = useAuth();
 
   useEffect(() => {
     console.log("User ID in TodosContext:", user?._id);

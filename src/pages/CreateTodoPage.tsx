@@ -1,12 +1,12 @@
 import AddTodoForm from '../components/AddTodoForm';
 import TodoService from '../services/TodoService';
-import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const CreateTodoPage = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const handleAddTodo = async (todoData: { title: string; date: Date, repeat: string }) => {
     if (!user) return;

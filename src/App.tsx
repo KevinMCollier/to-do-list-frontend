@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { UserProvider } from './context/UserContext';
+import { AuthProvider } from './context/AuthContext';
 import { TodosProvider } from './context/TodosContext';
 import LoginPage from './pages/LoginPage';
 import Homepage from './pages/Homepage';
@@ -9,7 +9,7 @@ import './App.css'
 function App() {
   return (
     <Router>
-      <UserProvider>
+      <AuthProvider>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/homepage" element={
@@ -19,7 +19,7 @@ function App() {
           } />
           <Route path="/create-todo" element={<CreateTodoPage />} />
         </Routes>
-      </UserProvider>
+      </AuthProvider>
     </Router>
   )
 }
