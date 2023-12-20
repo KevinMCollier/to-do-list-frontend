@@ -4,24 +4,23 @@ interface User {
   email: string;
   authentication_token: string;
   _id: string;
+  // Add other user properties as needed
 }
 
 interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
   token: string | null;
-  email: string | null;
 }
 
 type AuthAction =
-  | { type: 'LOGIN'; payload: { token: string; email: string } }
+  | { type: 'LOGIN'; payload: User }
   | { type: 'LOGOUT' };
 
 const initialState: AuthState = {
   isAuthenticated: false,
   user: null,
   token: null,
-  email: null,
 };
 
 const AuthContext = createContext<{
@@ -38,8 +37,8 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
       return {
         ...state,
         isAuthenticated: true,
-        token: action.payload.token,
-        email: action.payload.email,
+        user: action.payload,
+        token: action.payload.authentication_token,
       };
     case 'LOGOUT':
       return initialState;
@@ -58,10 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (token && user && user.email && user.authentication_token) {
       dispatch({
         type: 'LOGIN',
-        payload: {
-          token: user.authentication_token,
-          email: user.email,
-        },
+        payload: user,
       });
     }
   }, []);

@@ -2,7 +2,7 @@ import { useContext, useCallback, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import * as AuthService from '../services/AuthService';
 
-type Credentials = {
+export type Credentials = {
   email: string;
   password: string;
 };
@@ -13,9 +13,11 @@ export const useAuth = () => {
   const login = async (credentials: Credentials) => {
     try {
       const { user, token } = await AuthService.login(credentials);
+
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(user));
-      dispatch({ type: 'LOGIN', payload: { token, email: user.email } });
+
+      dispatch({ type: 'LOGIN', payload: user });
     } catch (error) {
       console.error('Login failed:', error);
     }
@@ -31,8 +33,9 @@ export const useAuth = () => {
   const initializeAuth = useCallback(() => {
     const token = localStorage.getItem('authToken');
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+
     if (token && user) {
-      dispatch({ type: 'LOGIN', payload: { token, email: user.email } });
+      dispatch({ type: 'LOGIN', payload: user });
     }
   }, [dispatch]);
 
@@ -43,7 +46,7 @@ export const useAuth = () => {
   return {
     isAuthenticated: state.isAuthenticated,
     user: state.user,
-    email: state.email,
+    email: state.user?.email,
     token: state.token,
     login,
     logout,

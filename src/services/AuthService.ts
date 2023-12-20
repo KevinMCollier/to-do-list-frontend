@@ -1,6 +1,6 @@
 const API_URL = 'http://localhost:3000';
 
-type Credentials = {
+export type Credentials = {
   email: string;
   password: string;
 };
@@ -19,14 +19,14 @@ export const login = async (credentials: Credentials) => {
       throw new Error('Login failed');
     }
 
-    if (!data.user || !data.user.authentication_token) {
-      throw new Error('Invalid login credentials');
-    }
+    // Extract the complete user data
+    const user = {
+      email: data.user.email,
+      authentication_token: data.user.authentication_token,
+      _id: data.user._id, // Add other properties as needed
+    };
 
-    const authToken = data.user.authentication_token;
-    const userEmail = data.user.email;
-
-    return { user: { email: userEmail }, token: authToken };
+    return { user, token: user.authentication_token };
   } catch (error) {
     console.error('Error during login:', error);
     throw error;
