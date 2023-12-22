@@ -8,12 +8,12 @@ import { useAuth } from '../hooks/useAuth';
 const Homepage = () => {
   const [viewMode, setViewMode] = useState<'all' | 'today' | 'week'>('all');
   const { allTodos, todaysTodos, loadAllTodos, loadTodaysTodos } = useTodos();
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const refreshTodos = () => {
-    if (user) {
-      loadAllTodos(user._id);
-      loadTodaysTodos(user._id);
+    if (user && token) {
+      loadAllTodos(user._id, token);
+      loadTodaysTodos(user._id, token);
     }
   };
 

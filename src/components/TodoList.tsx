@@ -15,7 +15,7 @@ type TodoListProps = {
 };
 
 const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) => {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
 
   let displayedTodos: Todo[] = [];
@@ -27,9 +27,9 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
   }
 
   const handleDelete = async (todoId: string) => {
-    if (!user) return;
+    if (!user || !token ) return;
     try {
-      await TodoService.deleteTodo(todoId, user._id);
+      await TodoService.deleteTodo(todoId, user.email, token);
       refreshTodos();
     } catch (error) {
       console.error('Error deleting todo:', error);
