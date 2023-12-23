@@ -44,6 +44,7 @@ const TodoService = {
   },
 
   deleteTodo: async (todoId: string, email: string, token: string): Promise<void> => {
+    console.log(`Calling DELETE on /todos/${todoId}`);
     const response = await fetch(`${API_BASE_URL}/todos/${todoId}`, {
       method: 'DELETE',
       headers: getAuthHeaders(email, token),

@@ -1,5 +1,5 @@
 export type Todo = {
-  _id: string;
+  id: string;
   title: string;
   date: string;
   repeat: 'Never' | 'Daily - Weekdays' | 'Daily - Weekends' | 'Daily' | 'Weekly';

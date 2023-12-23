@@ -17,6 +17,8 @@ type TodoListProps = {
 const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) => {
   const { email, token } = useAuth();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
+  console.log("All todos:", todos);
+
 
   let displayedTodos: Todo[] = [];
   if (viewMode === 'week') {
@@ -27,7 +29,8 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
   }
 
   const handleDelete = async (todoId: string) => {
-    if (!email || !token ) return;
+    console.log("Deleting todo with ID:", todoId);  // Add this to verify the todoId value
+    if (!email || !token || !todoId ) return;
     try {
       await TodoService.deleteTodo(todoId, email, token);
       refreshTodos();
@@ -53,8 +56,8 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
         </div>
       )}
       <div>
-        {displayedTodos.map(todo => (
-          <TodoItem key={todo._id} todo={todo} onDelete={handleDelete} />
+        {displayedTodos.map((todo) => (
+          <TodoItem key={todo.id} todo={todo} onDelete={() => handleDelete(todo.id)} />
         ))}
       </div>
     </div>

@@ -29,7 +29,7 @@ const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Dat
     }
   }
 
-  console.log(`Task: ${task._id}, Dates:`, dates);
+  console.log(`Task: ${task.id}, Dates:`, dates);
   return [...new Set(dates.map(date => date.toISOString()))].map(dateStr => new Date(dateStr));
 };
 

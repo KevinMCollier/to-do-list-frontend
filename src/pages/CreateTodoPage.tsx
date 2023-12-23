@@ -2,18 +2,23 @@
 import AddTodoForm from '../components/AddTodoForm';
 import TodoService from '../services/TodoService';
 import { useAuth } from '../hooks/useAuth';
+import useTodos from '../hooks/useTodos';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 const CreateTodoPage = () => {
   const navigate = useNavigate();
   const { email, token } = useAuth();
+  const { loadAllTodos } = useTodos();
 
   const handleAddTodo = async (todoData: { title: string; date: Date, repeat: string }) => {
     if (!email || !token) return;
 
     try {
-      await TodoService.createTodo(todoData, email, token); // Pass the user's email and token
+      const newTodo = await TodoService.createTodo(todoData, email, token); // Pass the user's email and token
+      console.log("New Todo created:", newTodo);
+
+      await loadAllTodos(email, token);
       navigate('/homepage'); // Redirect to homepage
     } catch (error) {
       console.error('Error creating todo:', error);
