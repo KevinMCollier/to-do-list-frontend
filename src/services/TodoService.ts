@@ -31,7 +31,7 @@ const TodoService = {
     return await response.json();
   },
 
-  createTodo: async (todoData: { title: string; date: Date, userId: string, repeat: string }, email: string, token: string): Promise<Todo> => {
+  createTodo: async (todoData: { title: string; date: Date, repeat: string }, email: string, token: string): Promise<Todo> => {
     const response = await fetch(`${API_BASE_URL}/todos`, {
       method: 'POST',
       headers: getAuthHeaders(email, token),

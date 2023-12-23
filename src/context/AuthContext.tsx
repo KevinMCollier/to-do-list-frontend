@@ -1,44 +1,42 @@
-import React, { createContext, useReducer, useEffect, Dispatch } from 'react';
+// AuthContext.tsx for to-do app
 
-interface User {
-  email: string;
-  authentication_token: string;
-  _id: string;
-  // Add other user properties as needed
-}
+import React, { createContext, useReducer, useEffect, ReactNode } from 'react';
 
 interface AuthState {
   isAuthenticated: boolean;
-  user: User | null;
+  email: string | null;
   token: string | null;
 }
 
 type AuthAction =
-  | { type: 'LOGIN'; payload: User }
+  | { type: 'LOGIN'; payload: { token: string; email: string } }
   | { type: 'LOGOUT' };
 
 const initialState: AuthState = {
   isAuthenticated: false,
-  user: null,
+  email: null,
   token: null,
 };
 
 const AuthContext = createContext<{
   state: AuthState;
-  dispatch: Dispatch<AuthAction>;
+  dispatch: React.Dispatch<AuthAction>;
 }>({
   state: initialState,
-  dispatch: () => null,
+  dispatch: () => null // Placeholder function
 });
 
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+  console.log('authReducer action:', action); // Debugging: Log the action
+  console.log('Current state:', state); // Debugging: Log the current state
+
   switch (action.type) {
     case 'LOGIN':
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload,
-        token: action.payload.authentication_token,
+        token: action.payload.token,
+        email: action.payload.email
       };
     case 'LOGOUT':
       return initialState;
@@ -47,17 +45,20 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   }
 };
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 
-    if (token && user && user.email && user.authentication_token) {
+    if (token && storedUser && storedUser.email) {
       dispatch({
         type: 'LOGIN',
-        payload: user,
+        payload: {
+          token: storedUser.authentication_token,
+          email: storedUser.email
+        }
       });
     }
   }, []);

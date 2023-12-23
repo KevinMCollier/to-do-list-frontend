@@ -1,3 +1,4 @@
+// Homepage.tsx
 import TodoList from '../components/TodoList';
 import ToggleSwitch from '../components/ToggleSwitch';
 import useTodos from '../hooks/useTodos';
@@ -8,12 +9,12 @@ import { useAuth } from '../hooks/useAuth';
 const Homepage = () => {
   const [viewMode, setViewMode] = useState<'all' | 'today' | 'week'>('all');
   const { allTodos, todaysTodos, loadAllTodos, loadTodaysTodos } = useTodos();
-  const { user, token } = useAuth();
+  const { email, token } = useAuth();
 
   const refreshTodos = () => {
-    if (user && token) {
-      loadAllTodos(user._id, token);
-      loadTodaysTodos(user._id, token);
+    if (email && token) {
+      loadAllTodos(email, token);
+      loadTodaysTodos(email, token);
     }
   };
 

@@ -15,6 +15,8 @@ export const login = async (credentials: Credentials) => {
 
     const data = await response.json();
 
+    console.log('Login response:', data);
+
     if (!response.ok) {
       throw new Error('Login failed');
     }
@@ -25,6 +27,9 @@ export const login = async (credentials: Credentials) => {
       authentication_token: data.user.authentication_token,
       _id: data.user._id, // Add other properties as needed
     };
+
+    console.log('User data:', user); // Debugging: Log the user data
+
 
     return { user, token: user.authentication_token };
   } catch (error) {
