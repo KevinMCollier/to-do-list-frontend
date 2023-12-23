@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 const CreateTodoPage = () => {
   const navigate = useNavigate();
   const { email, token } = useAuth();
-  const { loadAllTodos } = useTodos();
+  const { loadAllTodos, loadTodaysTodos } = useTodos();
 
   const handleAddTodo = async (todoData: { title: string; date: Date, repeat: string }) => {
     if (!email || !token) return;
@@ -19,6 +19,7 @@ const CreateTodoPage = () => {
       console.log("New Todo created:", newTodo);
 
       await loadAllTodos(email, token);
+      await loadTodaysTodos(email, token); // Make sure this function is defined and works as expected
       navigate('/homepage'); // Redirect to homepage
     } catch (error) {
       console.error('Error creating todo:', error);

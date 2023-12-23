@@ -3,7 +3,7 @@ import { Todo } from '../types/Todo';
 import TodoService from '../services/TodoService';
 import { useAuth } from '../hooks/useAuth';
 import { groupTasksByDisplayDates } from '../utils/utils';
-import { format, addDays, startOfDay, subDays } from 'date-fns';
+import { format, addDays, startOfDay } from 'date-fns';
 import { useState } from 'react';
 import './TodoList.css';
 import React from 'react';
@@ -17,20 +17,26 @@ type TodoListProps = {
 const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) => {
   const { email, token } = useAuth();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
-  console.log("All todos:", todos);
-
 
   let displayedTodos: Todo[] = [];
+
   if (viewMode === 'week') {
-    const groupedTodos: Record<string, Todo[]> = groupTasksByDisplayDates(todos, selectedDate, addDays(selectedDate, 1));
+    // Adjusting the range to the next 7 days instead of just one day
+    const upcomingEndDate = addDays(selectedDate, 7); // e.g., next 7 days
+    const groupedTodos = groupTasksByDisplayDates(todos, selectedDate, upcomingEndDate);
+
+    // Log to check the date range and results
+    console.log("Selected Date (Start):", selectedDate);
+    console.log("Upcoming End Date:", upcomingEndDate);
+    console.log("Grouped Todos:", groupedTodos);
+
     displayedTodos = groupedTodos[format(selectedDate, 'yyyy-MM-dd')] || [];
   } else {
     displayedTodos = todos;
   }
 
   const handleDelete = async (todoId: string) => {
-    console.log("Deleting todo with ID:", todoId);  // Add this to verify the todoId value
-    if (!email || !token || !todoId ) return;
+    if (!email || !token || !todoId) return;
     try {
       await TodoService.deleteTodo(todoId, email, token);
       refreshTodos();
@@ -40,7 +46,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
   };
 
   const handleDateChange = (direction: 'left' | 'right') => {
-    const newDate = direction === 'left' ? subDays(selectedDate, 1) : addDays(selectedDate, 1);
+    const newDate = direction === 'left' ? addDays(selectedDate, -1) : addDays(selectedDate, 1);
     setSelectedDate(newDate);
   };
 
