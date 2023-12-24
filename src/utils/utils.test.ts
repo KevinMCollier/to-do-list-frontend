@@ -11,10 +11,10 @@ describe('Utils', () => {
 
       // Mock tasks spread across different dates
       const mockTasks: Todo[] = [
-        { _id: '1', title: 'Task 1', date: '2023-03-01', repeat: 'Never', user: 'user1' },
-        { _id: '2', title: 'Task 2', date: '2023-03-01', repeat: 'Daily', user: 'user1' },
-        { _id: '3', title: 'Task 3', date: '2023-03-02', repeat: 'Never', user: 'user1' },
-        { _id: '4', title: 'Task 4', date: '2023-03-03', repeat: 'Never', user: 'user1' },
+        { id: '1', title: 'Task 1', date: '2023-03-01', repeat: 'Never', user: 'user1' },
+        { id: '2', title: 'Task 2', date: '2023-03-01', repeat: 'Daily', user: 'user1' },
+        { id: '3', title: 'Task 3', date: '2023-03-02', repeat: 'Never', user: 'user1' },
+        { id: '4', title: 'Task 4', date: '2023-03-03', repeat: 'Never', user: 'user1' },
         // Add more tasks if needed to test different scenarios
       ];
 

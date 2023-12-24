@@ -1,53 +1,54 @@
 import { Todo } from '../types/Todo';
 
+const API_BASE_URL = 'http://localhost:3000/api/v1';
 
-const API_BASE_URL = 'http://localhost:3000';
+// Function to get authentication headers
+const getAuthHeaders = (email: string, token: string) => ({
+  'Content-Type': 'application/json',
+  'X-User-Email': email,
+  'X-User-Token': token,
+});
 
 const TodoService = {
-  fetchAllTodos: async (userId: string): Promise<Todo[]> => {
-    const response = await fetch(`${API_BASE_URL}/todos/user/${userId}`);
-    console.log('Response for fetchAllTodos:', await response.clone().json());
+  fetchAllTodos: async (email: string, token: string): Promise<Todo[]> => {
+    const response = await fetch(`${API_BASE_URL}/todos`, {
+      headers: getAuthHeaders(email, token),
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch todos');
     }
     return await response.json();
   },
 
-  fetchTodaysTodos: async (userId: string): Promise<Todo[]> => {
-    const today = new Date().toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-    const response = await fetch(`${API_BASE_URL}/todos/byDate?date=${today}&user=${userId}`);
+  fetchTodaysTodos: async (email: string, token: string): Promise<Todo[]> => {
+    const today = new Date().toISOString().split('T')[0];
+    const response = await fetch(`${API_BASE_URL}/todos/by_date?date=${today}`, {
+      headers: getAuthHeaders(email, token),
+    });
     if (!response.ok) {
       throw new Error('Failed to fetch today\'s todos');
     }
     return await response.json();
   },
 
-  createTodo: async (todoData: { title: string; date: Date, userId: string, repeat: string }): Promise<Todo> => {
+  createTodo: async (todoData: { title: string; date: Date, repeat: string }, email: string, token: string): Promise<Todo> => {
     const response = await fetch(`${API_BASE_URL}/todos`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title: todoData.title,
-        date: todoData.date.toISOString(),
-        user: todoData.userId,
-        repeat: todoData.repeat
-      }),
+      headers: getAuthHeaders(email, token),
+      body: JSON.stringify(todoData),
     });
-
     if (!response.ok) {
       throw new Error('Failed to create todo');
     }
-
     return await response.json();
   },
 
-  deleteTodo: async (todoId: string, userId: string): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/todos/${todoId}?user=${userId}`, {
+  deleteTodo: async (todoId: string, email: string, token: string): Promise<void> => {
+    console.log(`Calling DELETE on /todos/${todoId}`);
+    const response = await fetch(`${API_BASE_URL}/todos/${todoId}`, {
       method: 'DELETE',
+      headers: getAuthHeaders(email, token),
     });
-
     if (!response.ok) {
       throw new Error('Failed to delete todo');
     }

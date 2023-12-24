@@ -1,19 +1,20 @@
+// Homepage.tsx
 import TodoList from '../components/TodoList';
 import ToggleSwitch from '../components/ToggleSwitch';
 import useTodos from '../hooks/useTodos';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
 
 const Homepage = () => {
   const [viewMode, setViewMode] = useState<'all' | 'today' | 'week'>('all');
   const { allTodos, todaysTodos, loadAllTodos, loadTodaysTodos } = useTodos();
-  const { user } = useUser();
+  const { email, token } = useAuth();
 
   const refreshTodos = () => {
-    if (user) {
-      loadAllTodos(user._id);
-      loadTodaysTodos(user._id);
+    if (email && token) {
+      loadAllTodos(email, token);
+      loadTodaysTodos(email, token);
     }
   };
 

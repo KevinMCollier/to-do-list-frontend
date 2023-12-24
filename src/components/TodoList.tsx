@@ -1,9 +1,9 @@
 import TodoItem from './TodoItem';
 import { Todo } from '../types/Todo';
 import TodoService from '../services/TodoService';
-import { useUser } from '../hooks/useUser';
+import { useAuth } from '../hooks/useAuth';
 import { groupTasksByDisplayDates } from '../utils/utils';
-import { format, addDays, startOfDay, subDays } from 'date-fns';
+import { format, addDays, startOfDay } from 'date-fns';
 import { useState } from 'react';
 import './TodoList.css';
 import React from 'react';
@@ -15,21 +15,30 @@ type TodoListProps = {
 };
 
 const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) => {
-  const { user } = useUser();
+  const { email, token } = useAuth();
   const [selectedDate, setSelectedDate] = useState(startOfDay(new Date()));
 
   let displayedTodos: Todo[] = [];
+
   if (viewMode === 'week') {
-    const groupedTodos: Record<string, Todo[]> = groupTasksByDisplayDates(todos, selectedDate, addDays(selectedDate, 1));
+    // Adjusting the range to the next 7 days instead of just one day
+    const upcomingEndDate = addDays(selectedDate, 7); // e.g., next 7 days
+    const groupedTodos = groupTasksByDisplayDates(todos, selectedDate, upcomingEndDate);
+
+    // Log to check the date range and results
+    console.log("Selected Date (Start):", selectedDate);
+    console.log("Upcoming End Date:", upcomingEndDate);
+    console.log("Grouped Todos:", groupedTodos);
+
     displayedTodos = groupedTodos[format(selectedDate, 'yyyy-MM-dd')] || [];
   } else {
     displayedTodos = todos;
   }
 
   const handleDelete = async (todoId: string) => {
-    if (!user) return;
+    if (!email || !token || !todoId) return;
     try {
-      await TodoService.deleteTodo(todoId, user._id);
+      await TodoService.deleteTodo(todoId, email, token);
       refreshTodos();
     } catch (error) {
       console.error('Error deleting todo:', error);
@@ -37,7 +46,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
   };
 
   const handleDateChange = (direction: 'left' | 'right') => {
-    const newDate = direction === 'left' ? subDays(selectedDate, 1) : addDays(selectedDate, 1);
+    const newDate = direction === 'left' ? addDays(selectedDate, -1) : addDays(selectedDate, 1);
     setSelectedDate(newDate);
   };
 
@@ -53,8 +62,8 @@ const TodoList: React.FC<TodoListProps> = ({ todos, refreshTodos, viewMode }) =>
         </div>
       )}
       <div>
-        {displayedTodos.map(todo => (
-          <TodoItem key={todo._id} todo={todo} onDelete={handleDelete} />
+        {displayedTodos.map((todo) => (
+          <TodoItem key={todo.id} todo={todo} onDelete={() => handleDelete(todo.id)} />
         ))}
       </div>
     </div>

@@ -4,14 +4,17 @@ import { format, isBefore, isAfter, isEqual, compareAsc, eachDayOfInterval, isWe
 const isWeekday = (date: Date) => !isWeekend(date);
 
 const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Date[] => {
-  const dates: Date[] = [];
+  console.log(`Processing task ID: ${task.id}, Title: ${task.title}, StartDate: ${startDate}, EndDate: ${endDate}, Repeat: ${task.repeat}`);
   const taskStartDate = new Date(task.date);
+  console.log(`Task Start Date: ${taskStartDate}, StartDate: ${startDate}, EndDate: ${endDate}`);
 
-  // Check if the task's own date falls within the interval, including it even for 'Never' repeat status
-  if (task.repeat === 'Never' && (isBefore(taskStartDate, endDate) || isEqual(taskStartDate, endDate)) && !isBefore(taskStartDate, startDate)) {
-    dates.push(taskStartDate);
+  const dates: Date[] = [];
+  if (task.repeat === 'Never') {
+    if (isBefore(taskStartDate, endDate) && isAfter(taskStartDate, startDate) || isEqual(taskStartDate, startDate) || isEqual(taskStartDate, endDate)) {
+      dates.push(taskStartDate);
+      console.log(`Task ID: ${task.id} with title ${task.title} is added for date: ${taskStartDate}`);
+    }
   }
-
 
   if (task.repeat !== 'Never') {
     const effectiveStartDate = isBefore(taskStartDate, startDate) ? startDate : taskStartDate;
@@ -29,11 +32,13 @@ const getDisplayDatesForTask = (task: Todo, startDate: Date, endDate: Date): Dat
     }
   }
 
-  console.log(`Task: ${task._id}, Dates:`, dates);
-  return [...new Set(dates.map(date => date.toISOString()))].map(dateStr => new Date(dateStr));
+  console.log(`Task ID: ${task.id}, Generated Dates:`, dates);
+
+  return dates;
 };
 
 const groupTasksByDisplayDates = (tasks: Todo[], startDate: Date, endDate: Date): Record<string, Todo[]> => {
+  console.log("Starting to group tasks by display dates");
   const groupedTasks: Record<string, Todo[]> = {};
 
   tasks.forEach(task => {
@@ -50,7 +55,7 @@ const groupTasksByDisplayDates = (tasks: Todo[], startDate: Date, endDate: Date)
     sortedGrouped[date] = groupedTasks[date];
   });
 
-  console.log('Grouped Tasks:', groupedTasks);
+  console.log('Grouped Tasks by Dates:', sortedGrouped);
   return sortedGrouped;
 };
 

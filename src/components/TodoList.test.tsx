@@ -17,14 +17,14 @@ jest.mock('../hooks/useUser', () => ({
 // Corrected mock data
 const mockTodos: Todo[] = [
   {
-    _id: 'todo1',
+    id: 'todo1',
     title: 'Todo 1',
     date: new Date().toISOString(),
     repeat: 'Never', // Matches one of the string literals
     user: 'user1',
   },
   {
-    _id: 'todo2',
+    id: 'todo2',
     title: 'Todo 2',
     date: new Date().toISOString(),
     repeat: 'Daily', // Matches one of the string literals
