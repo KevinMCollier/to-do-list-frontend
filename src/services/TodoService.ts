@@ -1,6 +1,6 @@
 import { Todo } from '../types/Todo';
 
-const API_BASE_URL = 'http://localhost:3000/api/v1';
+const API_BASE_URL = 'https://fast-tor-67274.herokuapp.com/api/v1';
 
 // Function to get authentication headers
 const getAuthHeaders = (email: string, token: string) => ({

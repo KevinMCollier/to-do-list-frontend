@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://fast-tor-67274.herokuapp.com/api/v1';
 
 export type Credentials = {
   email: string;
